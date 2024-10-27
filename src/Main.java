@@ -1,73 +1,3 @@
-import java.util.Objects;
-
-class Employee {
-    private static int idCounter = 1;  // Статическая переменная-счетчик для ID
-    private int id;                    // Уникальный ID сотрудника
-    private String fullName;           // ФИО сотрудника
-    private int department;            // Отдел сотрудника (от 1 до 5)
-    private double salary;             // Зарплата сотрудника
-
-    // Конструктор
-    public Employee(String fullName, int department, double salary) {
-        this.id = idCounter++;         // Присваиваем ID из счетчика и увеличиваем его
-        this.fullName = fullName;
-        this.department = department;
-        this.salary = salary;
-    }
-
-    // Геттеры
-    public int getId() {
-        return id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public int getDepartment() {
-        return department;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-
-    // Сеттеры
-    public void setDepartment(int department) {
-        this.department = department;
-    }
-
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
-    // Переопределяем equals
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return id == employee.id;
-    }
-
-    // Переопределяем hashCode
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    // Переопределяем toString для вывода информации о сотруднике
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", department=" + department +
-                ", salary=" + salary +
-                '}';
-    }
-}
-
 class EmployeeBook {
     private Employee[] employees = new Employee[10]; // Массив сотрудников
 
@@ -133,7 +63,39 @@ class EmployeeBook {
         return minSalaryEmployee;
     }
 
-    // Другие методы работы с массивом сотрудников (индексация по отделам, расчеты и т.д.) можно реализовать аналогично
+    // Поиск сотрудника с максимальной зарплатой
+    public Employee findEmployeeWithMaxSalary() {
+        Employee maxSalaryEmployee = null;
+        for (Employee employee : employees) {
+            if (employee != null && (maxSalaryEmployee == null || employee.getSalary() > maxSalaryEmployee.getSalary())) {
+                maxSalaryEmployee = employee;
+            }
+        }
+        return maxSalaryEmployee;
+    }
+
+    // Расчет общей суммы зарплат
+    public double calculateTotalSalary() {
+        double totalSalary = 0;
+        for (Employee employee : employees) {
+            if (employee != null) {
+                totalSalary += employee.getSalary();
+            }
+        }
+        return totalSalary;
+    }
+
+    // Расчет средней зарплаты
+    public double calculateAverageSalary() {
+        double totalSalary = calculateTotalSalary();
+        int count = 0;
+        for (Employee employee : employees) {
+            if (employee != null) {
+                count++;
+            }
+        }
+        return count > 0 ? totalSalary / count : 0;
+    }
 }
 
 public class Main {
@@ -163,5 +125,14 @@ public class Main {
 
         // Поиск сотрудника с минимальной зарплатой
         System.out.println("Сотрудник с минимальной зарплатой: " + employeeBook.findEmployeeWithMinSalary());
+
+        // Поиск сотрудника с максимальной зарплатой
+        System.out.println("Сотрудник с максимальной зарплатой: " + employeeBook.findEmployeeWithMaxSalary());
+
+        // Расчет общей суммы зарплат
+        System.out.println("Общая сумма зарплат: " + employeeBook.calculateTotalSalary());
+
+        // Расчет средней зарплаты
+        System.out.println("Средняя зарплата: " + employeeBook.calculateAverageSalary());
     }
 }
